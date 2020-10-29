@@ -1,6 +1,6 @@
 {
     "name" : "spatie/laravel-morph-map-generator",
-    "description" : "Automatically generate morph maps in your Laravel app",
+    "description" : "Automatically generate morph maps in your Laravel application",
     "keywords" : [
         "spatie",
         "laravel-morph-map-generator"
