@@ -2,12 +2,8 @@
 
 namespace Spatie\LaravelMorphMapGenerator\Tests;
 
-use Artisan;
 use Spatie\LaravelMorphMapGenerator\Commands\CacheMorphMapCommand;
 use Spatie\LaravelMorphMapGenerator\Commands\ClearMorphMapCommand;
-use Spatie\LaravelMorphMapGenerator\LaravelMorphMapGeneratorServiceProvider;
-use Spatie\LaravelMorphMapGenerator\Tests\Fakes\BaseModel;
-use Spatie\LaravelMorphMapGenerator\Tests\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class MorphMapCommandsTest extends TestCase

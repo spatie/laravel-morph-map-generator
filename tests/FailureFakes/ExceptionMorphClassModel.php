@@ -7,5 +7,4 @@ use Spatie\LaravelMorphMapGenerator\Tests\Fakes\BaseModel;
 
 class ExceptionMorphClassModel extends BaseModel
 {
-
 }

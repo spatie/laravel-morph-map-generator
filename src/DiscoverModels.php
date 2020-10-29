@@ -82,10 +82,10 @@ class DiscoverModels
         $ignoredFiles = $this->getAutoloadedFiles(base_path('composer.json'));
 
         return collect($files)
-            ->reject(fn(SplFileInfo $file) => in_array($file->getPathname(), $ignoredFiles))
-            ->map(fn(SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
-            ->filter(fn(string $modelClass) => $this->shouldClassBeIncluded($modelClass))
-            ->mapWithKeys(fn(string $modelClass) => $this->resolveMorphFromModelClass($modelClass))
+            ->reject(fn (SplFileInfo $file) => in_array($file->getPathname(), $ignoredFiles))
+            ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
+            ->filter(fn (string $modelClass) => $this->shouldClassBeIncluded($modelClass))
+            ->mapWithKeys(fn (string $modelClass) => $this->resolveMorphFromModelClass($modelClass))
             ->filter()
             ->pipe(function (Collection $collection) {
                 $usedMorphClasses = [];
@@ -150,7 +150,7 @@ class DiscoverModels
             $composerContents['autoload-dev']['files'] ?? []
         );
 
-        return array_map(fn(string $path) => realpath($basePath . $path), $paths);
+        return array_map(fn (string $path) => realpath($basePath . $path), $paths);
     }
 
     private function resolveMorphFromModelClass($modelClass): ?array

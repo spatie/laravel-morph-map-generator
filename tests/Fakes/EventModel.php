@@ -4,7 +4,6 @@ namespace Spatie\LaravelMorphMapGenerator\Tests\Fakes;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\LaravelMorphMapGenerator\Tests\Bla;
 
 // Will execute some events, which it shouldn't
 class EventModel extends BaseModel

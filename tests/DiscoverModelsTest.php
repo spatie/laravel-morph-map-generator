@@ -3,20 +3,17 @@
 namespace Spatie\LaravelMorphMapGenerator\Tests;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Event;
 use Spatie\LaravelMorphMapGenerator\DiscoverModels;
 use Spatie\LaravelMorphMapGenerator\Exceptions\DuplicateMorphClassFound;
 use Spatie\LaravelMorphMapGenerator\Exceptions\MorphClassCouldNotBeResolved;
 use Spatie\LaravelMorphMapGenerator\Tests\AlternativeFakes\AlternativeBaseModel;
 use Spatie\LaravelMorphMapGenerator\Tests\AlternativeFakes\AlternativeGeneralModel;
+use Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\ExceptionMorphClassModel;
+use Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\NullMorphClassModel;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\AbstractModel;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\BaseModel;
-use Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\DuplicateModel;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\EventModel;
-use Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\ExceptionMorphClassModel;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\GeneralModel;
-use Spatie\LaravelMorphMapGenerator\Tests\Fakes\IgnoredModel;
-use Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\NullMorphClassModel;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\OtherTypeModel;
 
 class DiscoverModelsTest extends TestCase
@@ -81,7 +78,7 @@ class DiscoverModelsTest extends TestCase
         $this->assertEquals([
             'event' => EventModel::class,
             'general' => GeneralModel::class,
-            'alternativeGeneral' => AlternativeGeneralModel::class
+            'alternativeGeneral' => AlternativeGeneralModel::class,
         ], $this->discoverer->discover());
     }
 
@@ -142,7 +139,7 @@ class DiscoverModelsTest extends TestCase
             ->withPaths([__DIR__ . '/AlternativeFakes']);
 
         $this->assertEquals([
-            'alternativeGeneral' => AlternativeGeneralModel::class
+            'alternativeGeneral' => AlternativeGeneralModel::class,
         ], $this->discoverer->discover());
     }
 
