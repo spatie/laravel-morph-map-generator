@@ -1,7 +1,9 @@
 # Automatically generate morph maps in your Laravel application
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-morph-map-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-morph-map-generator)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-morph-map-generator/run-tests?label=tests)](https://github.com/spatie/laravel-morph-map-generator/actions?query=workflow%3Arun-tests+branch%3Amaster)
+![Tests](https://github.com/spatie/laravel-morph-map-generator/workflows/Tests/badge.svg)
+![Psalm](https://github.com/spatie/laravel-morph-map-generator/workflows/Psalm/badge.svg)
+![Check & fix styling](https://github.com/spatie/laravel-morph-map-generator/workflows/Check%20&%20fix%20styling/badge.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-morph-map-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-morph-map-generator)
 
 **Under construction, do not use**
