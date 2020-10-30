@@ -38,7 +38,7 @@ composer require spatie/laravel-morph-map-generator
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\LaravelMorphMapGenerator\LaravelMorphMapGeneratorServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Spatie\LaravelMorphMapGenerator\MorphMapGeneratorServiceProvider" --tag="config"
 ```
 
 This is the contents of the published config file:
