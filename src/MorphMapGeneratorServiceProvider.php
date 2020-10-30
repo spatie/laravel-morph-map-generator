@@ -59,7 +59,7 @@ class MorphMapGeneratorServiceProvider extends ServiceProvider
     {
         $config = config('morph-map-generator.cache') ?? [];
 
-        $this->app->bind(MorphMapCacheDriver::class, fn() => $this->app->make(
+        $this->app->bind(MorphMapCacheDriver::class, fn () => $this->app->make(
             $config['type'] ?? FilesystemMorphMapCacheDriver::class,
             ['config' => $config]
         ));

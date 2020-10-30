@@ -3,7 +3,6 @@
 namespace Spatie\LaravelMorphMapGenerator\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Spatie\LaravelMorphMapGenerator\Cache\MorphMapCacheDriver;
 
 class ClearMorphMapCommand extends Command

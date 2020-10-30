@@ -20,9 +20,9 @@ class MorphMapGenerator
 
         return $models
             ->mapWithKeys(
-                fn(string $modelClass) => $this->resolveMorphFromModelClass($modelClass)
+                fn (string $modelClass) => $this->resolveMorphFromModelClass($modelClass)
             )
-            ->reject(fn(string $morph) => class_exists($morph))
+            ->reject(fn (string $morph) => class_exists($morph))
             ->mapWithKeys(function (string $morph, string $modelClass) use (&$usedMorphs) {
                 if (array_key_exists($morph, $usedMorphs)) {
                     throw DuplicateMorphClassFound::create($modelClass, $usedMorphs[$morph]);

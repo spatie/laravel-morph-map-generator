@@ -7,7 +7,6 @@ use Illuminate\Filesystem\Filesystem;
 use Psr\SimpleCache\CacheInterface;
 use Spatie\LaravelMorphMapGenerator\Cache\FilesystemMorphMapCacheDriver;
 use Spatie\LaravelMorphMapGenerator\Cache\LaravelMorphMapCacheDriver;
-use Spatie\LaravelMorphMapGenerator\Cache\MorphMapCacheDriver;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\GeneralModel;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
@@ -43,13 +42,13 @@ class MorphMapCacheDriversTest extends TestCase
     {
         return [
             [
-                fn() => new FilesystemMorphMapCacheDriver(
+                fn () => new FilesystemMorphMapCacheDriver(
                     resolve(Filesystem::class),
                     ['path' => (new TemporaryDirectory())->create()->path('cache')]
                 ),
             ],
             [
-                fn() => new LaravelMorphMapCacheDriver(
+                fn () => new LaravelMorphMapCacheDriver(
                     resolve(CacheInterface::class),
                     []
                 ),

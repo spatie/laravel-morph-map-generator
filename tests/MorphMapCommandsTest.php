@@ -18,7 +18,7 @@ class MorphMapCommandsTest extends TestCase
 
         $this->temporaryDirectory = (new TemporaryDirectory())->create();
 
-        $this->app->extend(MorphMapCacheDriver::class, fn() => resolve(FilesystemMorphMapCacheDriver::class, [
+        $this->app->extend(MorphMapCacheDriver::class, fn () => resolve(FilesystemMorphMapCacheDriver::class, [
             'config' => [
                 'type' => FilesystemMorphMapCacheDriver::class,
                 'path' => $this->temporaryDirectory->path('cached'),

@@ -2,12 +2,9 @@
 
 namespace Spatie\LaravelMorphMapGenerator;
 
-use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use ReflectionClass;
-use Spatie\LaravelMorphMapGenerator\Exceptions\DuplicateMorphClassFound;
-use Spatie\LaravelMorphMapGenerator\Exceptions\MorphClassCouldNotBeResolved;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 

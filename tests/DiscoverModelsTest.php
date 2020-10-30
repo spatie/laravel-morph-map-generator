@@ -3,8 +3,6 @@
 namespace Spatie\LaravelMorphMapGenerator\Tests;
 
 use Illuminate\Database\Eloquent\Model;
-use Psr\SimpleCache\CacheInterface;
-use Spatie\LaravelMorphMapGenerator\Cache\LaravelMorphMapCacheDriver;
 use Spatie\LaravelMorphMapGenerator\DiscoverModels;
 use Spatie\LaravelMorphMapGenerator\Exceptions\DuplicateMorphClassFound;
 use Spatie\LaravelMorphMapGenerator\Exceptions\MorphClassCouldNotBeResolved;
