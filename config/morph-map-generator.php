@@ -37,7 +37,9 @@ return [
     |
     */
 
-    'base_models' => [],
+    'base_models' => [
+        Illuminate\Database\Eloquent\Model::class
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -53,12 +55,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Cache location
+    | Cache
     |--------------------------------------------------------------------------
     |
-    | The cached versions of the morph map will be saved in this path.
+    | Morph maps can be cached, there's a `FilesystemMorphMapCacheDriver` which
+    | stores the morph map as a file in a directory or you can also use the
+    | Laravel built-in cache by using `LaravelMorphMapCacheDriver`.
+    |
+    | Both drivers have their own config:
+    | - `FilesystemMorphMapCacheDriver` requires a `path` to store the file
+    | - `LaravelMorphMapCacheDriver` requires a `key` for storage
     |
     */
 
-    'cache_path' => storage_path('app/morph-map-generator'),
+    'cache' => [
+        'type' => Spatie\LaravelMorphMapGenerator\Cache\FilesystemMorphMapCacheDriver::class,
+        'path' => storage_path('app/morph-map-generator'),
+    ]
 ];

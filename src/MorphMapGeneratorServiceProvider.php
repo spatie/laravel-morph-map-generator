@@ -4,30 +4,38 @@ namespace Spatie\LaravelMorphMapGenerator;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelMorphMapGenerator\Cache\FilesystemMorphMapCacheDriver;
+use Spatie\LaravelMorphMapGenerator\Cache\MorphMapCacheDriver;
 use Spatie\LaravelMorphMapGenerator\Commands\CacheMorphMapCommand;
 use Spatie\LaravelMorphMapGenerator\Commands\ClearMorphMapCommand;
 
-class LaravelMorphMapGeneratorServiceProvider extends ServiceProvider
+class MorphMapGeneratorServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/morph-map-generator.php', 'morph-map-generator');
 
-        $cachePath = config('morph-map-generator.cache_path') . '/morph-map.php';
+        $this->bindCacheDriver();
 
-        if (file_exists($cachePath)) {
-            Relation::morphMap(require $cachePath);
+        $cache = $this->app->make(MorphMapCacheDriver::class);
+
+        if ($cache->exists()) {
+            Relation::morphMap($cache->get());
 
             return;
         }
 
         if (config('morph-map-generator.autogenerate')) {
-            $discoverer = DiscoverModels::create()
+            $discoveredModels = DiscoverModels::create()
                 ->withPaths(config('morph-map-generator.paths'))
                 ->withBaseModels(config('morph-map-generator.base_models'))
-                ->ignoreModels(config('morph-map-generator.ignored_models'));
+                ->ignoreModels(config('morph-map-generator.ignored_models'))
+                ->discover();
 
-            Relation::morphMap($discoverer->discover());
+            $morphMap = MorphMapGenerator::create()
+                ->generate($discoveredModels);
+
+            Relation::morphMap($morphMap);
 
             return;
         }
@@ -45,5 +53,15 @@ class LaravelMorphMapGeneratorServiceProvider extends ServiceProvider
                 ClearMorphMapCommand::class,
             ]);
         }
+    }
+
+    private function bindCacheDriver()
+    {
+        $config = config('morph-map-generator.cache') ?? [];
+
+        $this->app->bind(MorphMapCacheDriver::class, fn() => $this->app->make(
+            $config['type'] ?? FilesystemMorphMapCacheDriver::class,
+            ['config' => $config]
+        ));
     }
 }

@@ -3,7 +3,7 @@
 namespace Spatie\LaravelMorphMapGenerator\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\LaravelMorphMapGenerator\LaravelMorphMapGeneratorServiceProvider;
+use Spatie\LaravelMorphMapGenerator\MorphMapGeneratorServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -15,7 +15,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            LaravelMorphMapGeneratorServiceProvider::class,
+            MorphMapGeneratorServiceProvider::class,
         ];
     }
 

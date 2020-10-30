@@ -3,9 +3,12 @@
 namespace Spatie\LaravelMorphMapGenerator\Tests;
 
 use Illuminate\Database\Eloquent\Model;
+use Psr\SimpleCache\CacheInterface;
+use Spatie\LaravelMorphMapGenerator\Cache\LaravelMorphMapCacheDriver;
 use Spatie\LaravelMorphMapGenerator\DiscoverModels;
 use Spatie\LaravelMorphMapGenerator\Exceptions\DuplicateMorphClassFound;
 use Spatie\LaravelMorphMapGenerator\Exceptions\MorphClassCouldNotBeResolved;
+use Spatie\LaravelMorphMapGenerator\MorphMapGenerator;
 use Spatie\LaravelMorphMapGenerator\Tests\AlternativeFakes\AlternativeBaseModel;
 use Spatie\LaravelMorphMapGenerator\Tests\AlternativeFakes\AlternativeGeneralModel;
 use Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\ExceptionMorphClassModel;
@@ -20,6 +23,8 @@ class DiscoverModelsTest extends TestCase
 {
     private DiscoverModels $discoverer;
 
+    private MorphMapGenerator $generator;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -27,6 +32,8 @@ class DiscoverModelsTest extends TestCase
         $this->discoverer = DiscoverModels::create()
             ->withBasePath(realpath(__DIR__ . '/../'))
             ->withRootNamespace('Spatie\LaravelMorphMapGenerator\\');
+
+        $this->generator = MorphMapGenerator::create();
     }
 
     /** @test */
@@ -36,20 +43,22 @@ class DiscoverModelsTest extends TestCase
             ->withBaseModels([BaseModel::class])
             ->withPaths([__DIR__ . '/Fakes']);
 
-        $discovered = $this->discoverer->discover();
+        $generated = $this->generator->generate(
+            $this->discoverer->discover()
+        );
 
         $this->assertEquals([
             'event' => EventModel::class,
             'general' => GeneralModel::class,
-        ], $discovered);
+        ], $generated);
 
         $this->assertNotContains([
             'abstract' => AbstractModel::class,
-        ], $discovered);
+        ], $generated);
 
         $this->assertNotContains([
             'other_type' => OtherTypeModel::class,
-        ], $discovered);
+        ], $generated);
     }
 
     /** @test */
@@ -62,10 +71,11 @@ class DiscoverModelsTest extends TestCase
                 EventModel::class,
             ]);
 
-        $discovered = $this->discoverer->discover();
-
-        $this->assertArrayNotHasKey('event', $discovered);
-        $this->assertCount(1, $discovered);
+        $generated = $this->generator->generate(
+            $this->discoverer->discover()
+        );
+        $this->assertArrayNotHasKey('event', $generated);
+        $this->assertCount(1, $generated);
     }
 
     /** @test */
@@ -75,11 +85,15 @@ class DiscoverModelsTest extends TestCase
             ->withBaseModels([BaseModel::class, AlternativeBaseModel::class])
             ->withPaths([__DIR__ . '/Fakes', __DIR__ . '/AlternativeFakes']);
 
+        $generated = $this->generator->generate(
+            $this->discoverer->discover()
+        );
+
         $this->assertEquals([
             'event' => EventModel::class,
             'general' => GeneralModel::class,
             'alternativeGeneral' => AlternativeGeneralModel::class,
-        ], $this->discoverer->discover());
+        ], $generated);
     }
 
     /** @test */
@@ -95,7 +109,9 @@ class DiscoverModelsTest extends TestCase
                 NullMorphClassModel::class,
             ]);
 
-        $this->discoverer->discover();
+        $this->generator->generate(
+            $this->discoverer->discover()
+        );
     }
 
     /** @test */
@@ -111,7 +127,9 @@ class DiscoverModelsTest extends TestCase
                 ExceptionMorphClassModel::class,
             ]);
 
-        $this->discoverer->discover();
+        $this->generator->generate(
+            $this->discoverer->discover()
+        );
     }
 
     /** @test */
@@ -128,7 +146,9 @@ class DiscoverModelsTest extends TestCase
                 ExceptionMorphClassModel::class,
             ]);
 
-        $this->discoverer->discover();
+        $this->generator->generate(
+            $this->discoverer->discover()
+        );
     }
 
     /** @test */
@@ -138,9 +158,13 @@ class DiscoverModelsTest extends TestCase
             ->withBaseModels([AlternativeBaseModel::class])
             ->withPaths([__DIR__ . '/AlternativeFakes']);
 
+        $generated = $this->generator->generate(
+            $this->discoverer->discover()
+        );
+
         $this->assertEquals([
             'alternativeGeneral' => AlternativeGeneralModel::class,
-        ], $this->discoverer->discover());
+        ], $generated);
     }
 
     /** @test */
@@ -150,6 +174,10 @@ class DiscoverModelsTest extends TestCase
             ->withBaseModels([Model::class])
             ->withPaths([__DIR__ . '/../vendor']);
 
-        $this->assertEmpty($this->discoverer->discover());
+        $generated = $this->generator->generate(
+            $this->discoverer->discover()
+        );
+
+        $this->assertEmpty($generated);
     }
 }

@@ -4,6 +4,7 @@ namespace Spatie\LaravelMorphMapGenerator\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Spatie\LaravelMorphMapGenerator\Cache\MorphMapCacheDriver;
 
 class ClearMorphMapCommand extends Command
 {
@@ -11,16 +12,12 @@ class ClearMorphMapCommand extends Command
 
     protected $description = 'Clear a cached version of the morph map';
 
-    public function handle(Filesystem $filesystem): void
+    public function handle(MorphMapCacheDriver $cache): void
     {
-        ['cache_path' => $cachePath] = config('morph-map-generator');
-
-        $cachePath = "{$cachePath}/morph-map.php";
-
-        if (! $filesystem->exists($cachePath)) {
+        if (! $cache->exists()) {
             return;
         }
 
-        $filesystem->delete($cachePath);
+        $cache->clear();
     }
 }

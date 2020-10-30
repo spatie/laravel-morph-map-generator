@@ -14,17 +14,17 @@ use Symfony\Component\Finder\Finder;
 class DiscoverModels
 {
     /** @var string[] */
-    private array $paths = [];
+    protected array $paths = [];
 
     /** @var string[] */
-    private array $baseModels = [];
+    protected array $baseModels = [];
 
     /** @var string[] */
-    private array $ignoredModels = [];
+    protected array $ignoredModels = [];
 
-    private string $basePath;
+    protected string $basePath;
 
-    private string $rootNamespace = '';
+    protected string $rootNamespace = '';
 
     public function __construct()
     {
@@ -71,10 +71,10 @@ class DiscoverModels
         return $this;
     }
 
-    public function discover(): array
+    public function discover(): Collection
     {
         if (empty($this->paths)) {
-            return [];
+            return collect();
         }
 
         $files = (new Finder())->files()->in($this->paths);
@@ -83,27 +83,11 @@ class DiscoverModels
 
         return collect($files)
             ->reject(fn (SplFileInfo $file) => in_array($file->getPathname(), $ignoredFiles))
-            ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
-            ->filter(fn (string $modelClass) => $this->shouldClassBeIncluded($modelClass))
-            ->mapWithKeys(fn (string $modelClass) => $this->resolveMorphFromModelClass($modelClass))
-            ->filter()
-            ->pipe(function (Collection $collection) {
-                $usedMorphClasses = [];
-
-                return $collection->mapWithKeys(function (string $morph, string $modelClass) use (&$usedMorphClasses) {
-                    if (array_key_exists($morph, $usedMorphClasses)) {
-                        throw DuplicateMorphClassFound::create($modelClass, $usedMorphClasses[$morph]);
-                    }
-
-                    $usedMorphClasses[$morph] = $modelClass;
-
-                    return [$morph => $modelClass];
-                });
-            })
-            ->toArray();
+            ->map(fn (SplFileInfo $file) => $this->fullyQualifiedClassNameFromFile($file))
+            ->filter(fn (string $modelClass) => $this->shouldClassBeIncluded($modelClass));
     }
 
-    private function fullQualifiedClassNameFromFile(SplFileInfo $file): string
+    private function fullyQualifiedClassNameFromFile(SplFileInfo $file): string
     {
         $class = trim(Str::replaceFirst($this->basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
 
@@ -151,27 +135,5 @@ class DiscoverModels
         );
 
         return array_map(fn (string $path) => realpath($basePath . $path), $paths);
-    }
-
-    private function resolveMorphFromModelClass($modelClass): ?array
-    {
-        /** @var \Illuminate\Database\Eloquent\Model $model */
-        $model = new $modelClass;
-
-        try {
-            $morph = $model->getMorphClass();
-        } catch (Exception $exception) {
-            throw MorphClassCouldNotBeResolved::exceptionThrown($modelClass, $exception);
-        }
-
-        if (empty($morph)) {
-            throw MorphClassCouldNotBeResolved::nullReturned($modelClass);
-        }
-
-        if (class_exists($morph)) {
-            return [$modelClass => null];
-        }
-
-        return [$modelClass => $morph];
     }
 }

@@ -51,7 +51,7 @@
     "extra" : {
         "laravel" : {
             "providers" : [
-                "Spatie\\LaravelMorphMapGenerator\\LaravelMorphMapGeneratorServiceProvider"
+                "MorphMapGeneratorServiceProvider"
             ]
         }
     },
