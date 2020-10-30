@@ -6,8 +6,6 @@
 ![Check & fix styling](https://github.com/spatie/laravel-morph-map-generator/workflows/Check%20&%20fix%20styling/badge.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-morph-map-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-morph-map-generator)
 
-**Under construction, do not use**
-
 With this package, you shouldn't worry about forgetting to add models to your application's morph map. Each model will autoregister itself in the morph map. The only thing you should do is implementing the `getMorphClass` method on your models like this:
 
 ```php
