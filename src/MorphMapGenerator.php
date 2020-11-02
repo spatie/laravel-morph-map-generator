@@ -4,6 +4,7 @@ namespace Spatie\LaravelMorphMapGenerator;
 
 use Exception;
 use Illuminate\Support\Collection;
+use ReflectionClass;
 use Spatie\LaravelMorphMapGenerator\Exceptions\DuplicateMorphClassFound;
 use Spatie\LaravelMorphMapGenerator\Exceptions\MorphClassCouldNotBeResolved;
 
@@ -19,9 +20,7 @@ class MorphMapGenerator
         $usedMorphs = [];
 
         return $models
-            ->mapWithKeys(
-                fn (string $modelClass) => $this->resolveMorphFromModelClass($modelClass)
-            )
+            ->mapWithKeys(fn (ReflectionClass $reflection) => $this->resolveMorphFromModelClass($reflection))
             ->reject(fn (string $morph) => class_exists($morph))
             ->mapWithKeys(function (string $morph, string $modelClass) use (&$usedMorphs) {
                 if (array_key_exists($morph, $usedMorphs)) {
@@ -34,21 +33,21 @@ class MorphMapGenerator
             })->toArray();
     }
 
-    private function resolveMorphFromModelClass(string $modelClass): ?array
+    private function resolveMorphFromModelClass(ReflectionClass $reflection): ?array
     {
         /** @var \Illuminate\Database\Eloquent\Model $model */
-        $model = new $modelClass;
+        $model = $reflection->newInstanceWithoutConstructor();
 
         try {
             $morph = $model->getMorphClass();
         } catch (Exception $exception) {
-            throw MorphClassCouldNotBeResolved::exceptionThrown($modelClass, $exception);
+            throw MorphClassCouldNotBeResolved::exceptionThrown($reflection->getName(), $exception);
         }
 
         if (empty($morph)) {
-            throw MorphClassCouldNotBeResolved::nullReturned($modelClass);
+            throw MorphClassCouldNotBeResolved::nullReturned($reflection->getName());
         }
 
-        return [$modelClass => $morph];
+        return [$reflection->getName() => $morph];
     }
 }
