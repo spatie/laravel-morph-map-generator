@@ -79,11 +79,11 @@ class DiscoverModels
         $ignoredFiles = $this->getAutoloadedFiles(base_path('composer.json'));
 
         return collect($files)
-            ->reject(fn(SplFileInfo $file) => in_array($file->getPathname(), $ignoredFiles))
-            ->map(fn(SplFileInfo $file) => $this->fullyQualifiedClassNameFromFile($file))
-            ->filter(fn(string $modelClass) => $this->shouldClassBeIncluded($modelClass))
-            ->map(fn(string $modelClass) => new ReflectionClass($modelClass))
-            ->reject(fn(ReflectionClass $reflection) => $reflection->isAbstract());
+            ->reject(fn (SplFileInfo $file) => in_array($file->getPathname(), $ignoredFiles))
+            ->map(fn (SplFileInfo $file) => $this->fullyQualifiedClassNameFromFile($file))
+            ->filter(fn (string $modelClass) => $this->shouldClassBeIncluded($modelClass))
+            ->map(fn (string $modelClass) => new ReflectionClass($modelClass))
+            ->reject(fn (ReflectionClass $reflection) => $reflection->isAbstract());
     }
 
     private function fullyQualifiedClassNameFromFile(SplFileInfo $file): string
@@ -129,6 +129,6 @@ class DiscoverModels
             $composerContents['autoload-dev']['files'] ?? []
         );
 
-        return array_map(fn(string $path) => realpath($basePath . $path), $paths);
+        return array_map(fn (string $path) => realpath($basePath . $path), $paths);
     }
 }
