@@ -130,16 +130,14 @@ abstract class BaseModel extends Model
 {
     public function getMorphClass()
     {
-        throw new Exception('Model has `getMorphClass` not yet implemented!');
+        throw new Exception('The model should implement `getMorphClass`');
     }
 }
 ```
 
 When a model is not implementing `getMorphClass`, it will throw an exception when building the generated morph map, making it possible to quickly find models that do not have a morph map entry. 
 
-When `autogenerate` is enabled in `morph-map-generator.php`, the morph map in your application is now dynamically generated each time the application boots. This is great in development environments since each time your application boots, the morph map is regenerated.
-
-In production, you do not want this behavior. It takes a few moments to dynamically generate the morph map, precious time you don't want to lose in production. That's why you can cache the dynamically generated morph map by running the following command:
+When `autogenerate` is enabled in the `morph-map-generator` config file, the morph map in your application will be dynamically generated each time the application boots. This is great in development environments since each time your application boots, the morph map is regenerated. For performanc reasons, you should cache the dynamically generated morph map by running the following command:
 
 ```bash
 php artisan morph-map:cache
