@@ -11,7 +11,7 @@ With this package, you shouldn't worry about forgetting to add models to your ap
 ```php
 class Post extends Model
 {
-    public function getMorphClass(){
+    public function getMorphClass(): string {
         return 'post';
     }
 }
