@@ -52,6 +52,16 @@ return [
 
     'autogenerate' => true,
 
+    /**
+     * Change the base directory if the models don't reside in the default App namespace.
+     *
+     * For example, the base directory would become 'src' if:
+     * - Application is in src/App
+     * - Models are in src/Domain
+     */
+
+    'base_directory' => '/',
+
     /*
     * Within these paths, the package will search for models to be included
     * in the generated morph map.

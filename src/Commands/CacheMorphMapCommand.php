@@ -16,6 +16,7 @@ class CacheMorphMapCommand extends Command
     public function handle(MorphMapCacheDriver $cache): void
     {
         [
+            'base_directory' => $baseDir,
             'paths' => $paths,
             'base_models' => $baseModels,
             'ignored_models' => $ignoredModels,
@@ -23,6 +24,7 @@ class CacheMorphMapCommand extends Command
 
         $discoveredModels = DiscoverModels::create()
             ->ignoreModels($ignoredModels)
+            ->withBasePath(base_path($baseDir))
             ->withPaths($paths)
             ->withBaseModels($baseModels)
             ->discover();
