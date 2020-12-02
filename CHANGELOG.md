@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-morph-map-generator` will be documented in this file
 
+## 1.0.4 - 2020-11-26
+
+- add support for a base path (#2)
+
 ## 1.0.3 - 2020-11-26
 
 - add PHP8 support
