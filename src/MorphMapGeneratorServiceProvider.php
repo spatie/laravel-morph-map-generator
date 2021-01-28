@@ -27,7 +27,7 @@ class MorphMapGeneratorServiceProvider extends ServiceProvider
 
         if (config('morph-map-generator.autogenerate')) {
             $discoveredModels = DiscoverModels::create()
-                ->withBasePath(base_path(config('morph-map.generator.base_directory')))
+                ->withBasePath(base_path(config('morph-map-generator.base_directory')))
                 ->withPaths(config('morph-map-generator.paths'))
                 ->withBaseModels(config('morph-map-generator.base_models'))
                 ->ignoreModels(config('morph-map-generator.ignored_models'))
