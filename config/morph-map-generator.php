@@ -9,14 +9,11 @@ return [
     'autogenerate' => true,
 
     /**
-     * Change the base directory if the models don't reside in the default App namespace.
-     *
-     * For example, the base directory would become 'src' if:
-     * - Application is in src/App
-     * - Models are in src/Domain
+     * When your models don't reside in the default App namespace you can set a
+     * different base directory.
      */
 
-    'base_directory' => '/',
+    'base_directory' => '',
 
     /*
     * Within these paths, the package will search for models to be included
