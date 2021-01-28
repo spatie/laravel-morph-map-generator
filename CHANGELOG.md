@@ -5,6 +5,7 @@ All notable changes to `laravel-morph-map-generator` will be documented in this 
 ## 1.0.5 - 2021-01-28
 
 - fix a base path default
+- fix base path typo (#4)
 
 ## 1.0.4 - 2020-11-26
 
