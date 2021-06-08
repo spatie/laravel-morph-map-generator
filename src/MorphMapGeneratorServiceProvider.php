@@ -16,8 +16,20 @@ class MorphMapGeneratorServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/morph-map-generator.php', 'morph-map-generator');
 
         $this->bindCacheDriver();
+    }
 
-        $cache = $this->app->make(MorphMapCacheDriver::class);
+    public function boot(MorphMapCacheDriver $cache): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../config/morph-map-generator.php' => config_path('morph-map-generator.php'),
+            ], 'config');
+
+            $this->commands([
+                CacheMorphMapCommand::class,
+                ClearMorphMapCommand::class,
+            ]);
+        }
 
         if ($cache->exists()) {
             Relation::morphMap($cache->get());
@@ -39,20 +51,6 @@ class MorphMapGeneratorServiceProvider extends ServiceProvider
             Relation::morphMap($morphMap);
 
             return;
-        }
-    }
-
-    public function boot(): void
-    {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__ . '/../config/morph-map-generator.php' => config_path('morph-map-generator.php'),
-            ], 'config');
-
-            $this->commands([
-                CacheMorphMapCommand::class,
-                ClearMorphMapCommand::class,
-            ]);
         }
     }
 
