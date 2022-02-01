@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-morph-map-generator` will be documented in this file
 
+## 1.0.7 - 2022-02-01
+
+- Add support for PHP 8.1
+- Add support for Laravel 9
+
 ## 1.0.6 - 2021-08-19
 
 - fix some issues with caching (#5)
