@@ -10,4 +10,5 @@
 /.editorconfig      export-ignore
 /.php_cs.dist.php   export-ignore
 /.github            export-ignore
+/CHANGELOG.md       export-ignore
 /psalm.xml.dist     export-ignore
