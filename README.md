@@ -137,6 +137,17 @@ Removing a cached morph map can be done by running:
 php artisan morph-map:clear
 ```
 
+### Models outside your path
+
+Some models like the default Laravel User model and models defined by packages will not be discovered by this package since it only searches for models within the app path and not the complete vendor directory. You can include these models in your morph map by using the default [morph map](https://laravel.com/docs/9.x/eloquent-relationships#custom-polymorphic-types) feature from Laravel:
+
+```php
+Relation::enforceMorphMap([
+    'post' => 'App\Models\Post',
+    'video' => 'App\Models\Video',
+]);
+```
+
 ## Testing
 
 ``` bash
