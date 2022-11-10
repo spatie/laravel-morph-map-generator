@@ -1,12 +1,13 @@
 <?php
 
+use function Pest\Laravel\artisan;
+
 use Spatie\LaravelMorphMapGenerator\Cache\FilesystemMorphMapCacheDriver;
 use Spatie\LaravelMorphMapGenerator\Cache\MorphMapCacheDriver;
 use Spatie\LaravelMorphMapGenerator\Commands\CacheMorphMapCommand;
 use Spatie\LaravelMorphMapGenerator\Commands\ClearMorphMapCommand;
-use Spatie\TemporaryDirectory\TemporaryDirectory;
 
-use function Pest\Laravel\artisan;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 beforeEach(function () {
     $this->temporaryDirectory = (new TemporaryDirectory())->create();
