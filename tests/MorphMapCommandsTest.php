@@ -30,7 +30,7 @@ it('can cache a morph map')
 
 it('can remove a cached morph map')
     ->tap(
-        fn () =>  artisan(CacheMorphMapCommand::class)
+        fn () => artisan(CacheMorphMapCommand::class)
             ->assertExitCode(0)
             ->run()
     )
