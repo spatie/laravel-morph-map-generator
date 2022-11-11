@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\LaravelMorphMapGenerator\Tests;
-
 use Illuminate\Database\Eloquent\Model;
 use Spatie\LaravelMorphMapGenerator\DiscoverModels;
 use Spatie\LaravelMorphMapGenerator\Exceptions\DuplicateMorphClassFound;
@@ -17,165 +15,140 @@ use Spatie\LaravelMorphMapGenerator\Tests\Fakes\EventModel;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\GeneralModel;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\OtherTypeModel;
 
-class DiscoverModelsTest extends TestCase
-{
-    private DiscoverModels $discoverer;
+beforeEach(function () {
+    $this->discoverer = DiscoverModels::create()
+        ->withBasePath(realpath(__DIR__ . '/../'))
+        ->withRootNamespace('Spatie\LaravelMorphMapGenerator\\');
 
-    private MorphMapGenerator $generator;
+    $this->generator = MorphMapGenerator::create();
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+it('will discover models in a path', function () {
+    $this->discoverer
+        ->withBaseModels([BaseModel::class])
+        ->withPaths([__DIR__ . '/Fakes']);
 
-        $this->discoverer = DiscoverModels::create()
-            ->withBasePath(realpath(__DIR__ . '/../'))
-            ->withRootNamespace('Spatie\LaravelMorphMapGenerator\\');
+    $generated = $this->generator->generate(
+        $this->discoverer->discover()
+    );
 
-        $this->generator = MorphMapGenerator::create();
-    }
-
-    /** @test */
-    public function it_will_discover_models_in_a_path()
-    {
-        $this->discoverer
-            ->withBaseModels([BaseModel::class])
-            ->withPaths([__DIR__ . '/Fakes']);
-
-        $generated = $this->generator->generate(
-            $this->discoverer->discover()
-        );
-
-        $this->assertEquals([
+    expect($generated)
+        ->toEqual([
             'event' => EventModel::class,
             'general' => GeneralModel::class,
-        ], $generated);
-
-        $this->assertNotContains([
+        ])
+        ->not->toContain([
             'abstract' => AbstractModel::class,
-        ], $generated);
-
-        $this->assertNotContains([
+        ])
+        ->not->toContain([
             'other_type' => OtherTypeModel::class,
-        ], $generated);
-    }
+        ]);
+});
 
-    /** @test */
-    public function it_can_ignore_models()
-    {
-        $this->discoverer
-            ->withBaseModels([BaseModel::class])
-            ->withPaths([__DIR__ . '/Fakes'])
-            ->ignoreModels([
-                EventModel::class,
-            ]);
+it('can ignore models', function () {
+    $this->discoverer
+        ->withBaseModels([BaseModel::class])
+        ->withPaths([__DIR__ . '/Fakes'])
+        ->ignoreModels([
+            EventModel::class,
+        ]);
 
-        $generated = $this->generator->generate(
-            $this->discoverer->discover()
-        );
-        $this->assertArrayNotHasKey('event', $generated);
-        $this->assertCount(1, $generated);
-    }
+    $generated = $this->generator->generate(
+        $this->discoverer->discover()
+    );
 
-    /** @test */
-    public function it_can_use_multiple_paths_and_base_models()
-    {
-        $this->discoverer
-            ->withBaseModels([BaseModel::class, AlternativeBaseModel::class])
-            ->withPaths([__DIR__ . '/Fakes', __DIR__ . '/AlternativeFakes']);
+    expect($generated)
+        ->not->toHaveKey('event')
+        ->toHaveCount(1);
+});
 
-        $generated = $this->generator->generate(
-            $this->discoverer->discover()
-        );
+it('can use multiple paths and base models', function () {
+    $this->discoverer
+        ->withBaseModels([BaseModel::class, AlternativeBaseModel::class])
+        ->withPaths([__DIR__ . '/Fakes', __DIR__ . '/AlternativeFakes']);
 
-        $this->assertEquals([
-            'event' => EventModel::class,
-            'general' => GeneralModel::class,
-            'alternativeGeneral' => AlternativeGeneralModel::class,
-        ], $generated);
-    }
+    $generated = $this->generator->generate(
+        $this->discoverer->discover()
+    );
 
-    /** @test */
-    public function it_will_handle_exceptions()
-    {
-        $this->expectException(MorphClassCouldNotBeResolved::class);
-        $this->expectExceptionMessage("Could not get the morph class from: `Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\ExceptionMorphClassModel`, it returned the following exception: Model `Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\ExceptionMorphClassModel` has no morph class");
+    expect($generated)->toEqual([
+        'event' => EventModel::class,
+        'general' => GeneralModel::class,
+        'alternativeGeneral' => AlternativeGeneralModel::class,
+    ]);
+});
 
-        $this->discoverer
-            ->withBaseModels([BaseModel::class])
-            ->withPaths([__DIR__ . '/FailureFakes'])
-            ->ignoreModels([
-                NullMorphClassModel::class,
-            ]);
+it('will handle exceptions', function () {
+    $this->discoverer
+        ->withBaseModels([BaseModel::class])
+        ->withPaths([__DIR__ . '/FailureFakes'])
+        ->ignoreModels([
+            NullMorphClassModel::class,
+        ]);
 
-        $this->generator->generate(
-            $this->discoverer->discover()
-        );
-    }
+    $this->generator->generate(
+        $this->discoverer->discover()
+    );
+})->throws(
+    MorphClassCouldNotBeResolved::class,
+    "Could not get the morph class from: `Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\ExceptionMorphClassModel`, it returned the following exception: Model `Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\ExceptionMorphClassModel` has no morph class"
+);
 
-    /** @test */
-    public function it_will_handle_empty_morph_classes()
-    {
-        $this->expectException(MorphClassCouldNotBeResolved::class);
-        $this->expectExceptionMessage("Could not get the morph class from: `Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\NullMorphClassModel`, it returned null");
+it('will handle empty classes', function () {
+    $this->discoverer
+        ->withBaseModels([BaseModel::class])
+        ->withPaths([__DIR__ . '/FailureFakes'])
+        ->ignoreModels([
+            ExceptionMorphClassModel::class,
+        ]);
 
-        $this->discoverer
-            ->withBaseModels([BaseModel::class])
-            ->withPaths([__DIR__ . '/FailureFakes'])
-            ->ignoreModels([
-                ExceptionMorphClassModel::class,
-            ]);
+    $this->generator->generate(
+        $this->discoverer->discover()
+    );
+})->throws(
+    MorphClassCouldNotBeResolved::class,
+    "Could not get the morph class from: `Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\NullMorphClassModel`, it returned null"
+);
 
-        $this->generator->generate(
-            $this->discoverer->discover()
-        );
-    }
+it('can detect that a morph class was duplicated', function () {
+    $this->discoverer
+        ->withBaseModels([BaseModel::class])
+        ->withPaths([__DIR__ . '/Fakes', __DIR__ . '/FailureFakes'])
+        ->ignoreModels([
+            NullMorphClassModel::class,
+            ExceptionMorphClassModel::class,
+        ]);
 
-    /** @test */
-    public function it_can_detect_that_a_morph_class_was_duplicated()
-    {
-        $this->expectException(DuplicateMorphClassFound::class);
-        $this->expectExceptionMessage('The morph class used in: Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\DuplicateModel` cannot be the same as the one used in: `Spatie\LaravelMorphMapGenerator\Tests\Fakes\GeneralModel`');
+    $this->generator->generate(
+        $this->discoverer->discover()
+    );
+})->throws(
+    DuplicateMorphClassFound::class,
+    'The morph class used in: Spatie\LaravelMorphMapGenerator\Tests\FailureFakes\DuplicateModel` cannot be the same as the one used in: `Spatie\LaravelMorphMapGenerator\Tests\Fakes\GeneralModel`'
+);
 
-        $this->discoverer
-            ->withBaseModels([BaseModel::class])
-            ->withPaths([__DIR__ . '/Fakes', __DIR__ . '/FailureFakes'])
-            ->ignoreModels([
-                NullMorphClassModel::class,
-                ExceptionMorphClassModel::class,
-            ]);
+it('will filter out models that have no get morph class method implemented', function () {
+    $this->discoverer
+        ->withBaseModels([AlternativeBaseModel::class])
+        ->withPaths([__DIR__ . '/AlternativeFakes']);
 
-        $this->generator->generate(
-            $this->discoverer->discover()
-        );
-    }
+    $generated = $this->generator->generate(
+        $this->discoverer->discover()
+    );
 
-    /** @test */
-    public function it_will_filter_out_model_that_have_no_get_morph_class_method_implemented()
-    {
-        $this->discoverer
-            ->withBaseModels([AlternativeBaseModel::class])
-            ->withPaths([__DIR__ . '/AlternativeFakes']);
+    expect($generated)->toEqual([
+        'alternativeGeneral' => AlternativeGeneralModel::class,
+    ]);
+});
 
-        $generated = $this->generator->generate(
-            $this->discoverer->discover()
-        );
+it("won't discover models in the autoloaded directory", function () {
+    $this->discoverer
+        ->withBaseModels([Model::class])
+        ->withPaths([__DIR__ . '/../vendor']);
 
-        $this->assertEquals([
-            'alternativeGeneral' => AlternativeGeneralModel::class,
-        ], $generated);
-    }
+    $generated = $this->generator->generate(
+        $this->discoverer->discover()
+    );
 
-    /** @test */
-    public function it_wont_discover_models_in_the_autoloaded_directory()
-    {
-        $this->discoverer
-            ->withBaseModels([Model::class])
-            ->withPaths([__DIR__ . '/../vendor']);
-
-        $generated = $this->generator->generate(
-            $this->discoverer->discover()
-        );
-
-        $this->assertEmpty($generated);
-    }
-}
+    expect($generated)->toBeEmpty();
+});
