@@ -2,6 +2,24 @@
 
 All notable changes to `laravel-morph-map-generator` will be documented in this file
 
+## 1.1.0 - 2023-01-14
+
+### What's Changed
+
+- Update .gitattributes by @PaolaRuby in https://github.com/spatie/laravel-morph-map-generator/pull/7
+- Update .gitattributes by @angeljqv in https://github.com/spatie/laravel-morph-map-generator/pull/8
+- PHP 8.2 Build by @erikn69 in https://github.com/spatie/laravel-morph-map-generator/pull/10
+- Refactor tests to Pest by @alexmanase in https://github.com/spatie/laravel-morph-map-generator/pull/11
+- Laravel 10.x support by @erikn69 in https://github.com/spatie/laravel-morph-map-generator/pull/12
+
+### New Contributors
+
+- @PaolaRuby made their first contribution in https://github.com/spatie/laravel-morph-map-generator/pull/7
+- @angeljqv made their first contribution in https://github.com/spatie/laravel-morph-map-generator/pull/8
+- @alexmanase made their first contribution in https://github.com/spatie/laravel-morph-map-generator/pull/11
+
+**Full Changelog**: https://github.com/spatie/laravel-morph-map-generator/compare/1.0.7...1.1.0
+
 ## 1.0.7 - 2022-02-01
 
 - Add support for PHP 8.1
