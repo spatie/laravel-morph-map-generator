@@ -6,26 +6,32 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
         php: [7.4, 8.0, 8.1, 8.2]
-        laravel: [8.*, 9.*]
+        laravel: [8.*, 9.*, 10.*]
         dependency-version: [prefer-lowest, prefer-stable]
         include:
           - laravel: 8.*
             testbench: ^6.24
           - laravel: 9.*
             testbench: 7.*
+          - laravel: 10.*
+            testbench: 8.*  
         exclude:
           - laravel: 9.*
             php: 7.4
+          - laravel: 10.*
+            php: 7.4
+          - laravel: 10.*
+            php: 8.0
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cache dependencies
         uses: actions/cache@v2
