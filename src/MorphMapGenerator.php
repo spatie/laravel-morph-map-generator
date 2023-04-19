@@ -10,9 +10,16 @@ use Spatie\LaravelMorphMapGenerator\Exceptions\MorphClassCouldNotBeResolved;
 
 class MorphMapGenerator
 {
+    private static $resolveCallback;
+
     public static function create(): self
     {
         return new self();
+    }
+
+    public static function resolveUsing(callable $resolveCallback)
+    {
+        static::$resolveCallback = $resolveCallback;
     }
 
     public function generate(Collection $models): array
@@ -39,7 +46,9 @@ class MorphMapGenerator
         $model = $reflection->newInstanceWithoutConstructor();
 
         try {
-            $morph = $model->getMorphClass();
+            $morph = static::$resolveCallback
+                ? call_user_func(static::$resolveCallback, $model)
+                : $model->getMorphClass();
         } catch (Exception $exception) {
             throw MorphClassCouldNotBeResolved::exceptionThrown($reflection->getName(), $exception);
         }

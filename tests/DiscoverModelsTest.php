@@ -78,6 +78,24 @@ it('can use multiple paths and base models', function () {
     ]);
 });
 
+it('can use a custom resolver', function () {
+    $this->discoverer
+        ->withBaseModels([BaseModel::class])
+        ->withPaths([__DIR__ . '/Fakes']);
+
+    // Use the table name as the morph class
+    MorphMapGenerator::resolveUsing(fn ($model) => $model->getTable());
+
+    $generated = $this->generator->generate(
+        $this->discoverer->discover()
+    );
+
+    expect($generated)->toEqual([
+        'event_models' => EventModel::class,
+        'general_models' => GeneralModel::class,
+    ]);
+});
+
 it('will handle exceptions', function () {
     $this->discoverer
         ->withBaseModels([BaseModel::class])
