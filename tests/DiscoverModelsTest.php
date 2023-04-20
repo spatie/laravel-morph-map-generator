@@ -16,6 +16,8 @@ use Spatie\LaravelMorphMapGenerator\Tests\Fakes\GeneralModel;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\OtherTypeModel;
 
 beforeEach(function () {
+    MorphMapGenerator::$resolveCallback = null;
+
     $this->discoverer = DiscoverModels::create()
         ->withBasePath(realpath(__DIR__ . '/../'))
         ->withRootNamespace('Spatie\LaravelMorphMapGenerator\\');
