@@ -123,7 +123,7 @@ abstract class BaseModel extends Model
 }
 ```
 
-When a model is not implementing `getMorphClass`, it will throw an exception when building the generated morph map, making it possible to quickly find models that do not have a morph map entry. 
+When a model is not implementing `getMorphClass`, it will throw an exception when building the generated morph map, making it possible to quickly find models that do not have a morph map entry.
 
 When `autogenerate` is enabled in the `morph-map-generator` config file, the morph map in your application will be dynamically generated each time the application boots. This is great in development environments since each time your application boots, the morph map is regenerated. For performanc reasons, you should cache the dynamically generated morph map by running the following command:
 
@@ -136,6 +136,19 @@ Removing a cached morph map can be done by running:
 ```php
 php artisan morph-map:clear
 ```
+
+### Using a custom resolver
+
+You can also determine morph class values programmatically by using a custom resolver. For example, you could use the following to automatically derive the value based on the singular form of the model's table name:
+
+```php
+use Illuminate\Support\Str;
+use Spatie\LaravelMorphMapGenerator\MorphMapGenerator;
+
+MorphMapGenerator::resolveUsing(fn ($model) => Str::singular($model->getTable()));
+```
+
+You may set the resolver in the `boot` method of your `AppServiceProvider` or a separate service provider if needed.
 
 ### Models outside your path
 
