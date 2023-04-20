@@ -10,7 +10,7 @@ use Spatie\LaravelMorphMapGenerator\Exceptions\MorphClassCouldNotBeResolved;
 
 class MorphMapGenerator
 {
-    private static $resolveCallback;
+    protected static $resolveCallback;
 
     public static function create(): self
     {
