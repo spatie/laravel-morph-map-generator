@@ -94,6 +94,18 @@ it('can use a custom resolver', function () {
         'event_models' => EventModel::class,
         'general_models' => GeneralModel::class,
     ]);
+
+    // If the custom resolver returns null, it should fall back to getMorphClass
+    MorphMapGenerator::resolveUsing(fn ($model) => null);
+
+    $generated = $this->generator->generate(
+        $this->discoverer->discover()
+    );
+
+    expect($generated)->toEqual([
+        'event' => EventModel::class,
+        'general' => GeneralModel::class,
+    ]);
 });
 
 it('will handle exceptions', function () {

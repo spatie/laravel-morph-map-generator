@@ -46,9 +46,11 @@ class MorphMapGenerator
         $model = $reflection->newInstanceWithoutConstructor();
 
         try {
-            $morph = static::$resolveCallback
-                ? call_user_func(static::$resolveCallback, $model)
-                : $model->getMorphClass();
+            if (static::$resolveCallback) {
+                $morph = call_user_func(static::$resolveCallback, $model);
+            }
+
+            $morph ??= $model->getMorphClass();
         } catch (Exception $exception) {
             throw MorphClassCouldNotBeResolved::exceptionThrown($reflection->getName(), $exception);
         }
