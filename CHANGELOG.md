@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-morph-map-generator` will be documented in this file
 
+## 1.2.0 - 2023-04-28
+
+- Add support for custom morph class resolvers (#13)
+
 ## 1.1.0 - 2023-01-14
 
 ### What's Changed
