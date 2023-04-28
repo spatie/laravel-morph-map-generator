@@ -142,13 +142,12 @@ php artisan morph-map:clear
 You can also determine morph class values programmatically by using a custom resolver. For example, you could use the following to automatically derive the value based on the singular form of the model's table name:
 
 ```php
-use Illuminate\Support\Str;
-use Spatie\LaravelMorphMapGenerator\MorphMapGenerator;
-
 MorphMapGenerator::resolveUsing(fn ($model) => Str::singular($model->getTable()));
 ```
 
-You may set the resolver in the `boot` method of your `AppServiceProvider` or a separate service provider if needed.
+Be warned! When the output of the closure above is not stable then you'll manually need to update all the `morhp_type` columns within your database. Using something like the table name is a good idea since those do not change that often.
+
+You may set the resolver in the `boot` method of one of your service providers.
 
 ### Models outside your path
 
