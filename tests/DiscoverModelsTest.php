@@ -16,6 +16,8 @@ use Spatie\LaravelMorphMapGenerator\Tests\Fakes\GeneralModel;
 use Spatie\LaravelMorphMapGenerator\Tests\Fakes\OtherTypeModel;
 
 beforeEach(function () {
+    MorphMapGenerator::$resolveCallback = null;
+
     $this->discoverer = DiscoverModels::create()
         ->withBasePath(realpath(__DIR__ . '/../'))
         ->withRootNamespace('Spatie\LaravelMorphMapGenerator\\');
@@ -75,6 +77,36 @@ it('can use multiple paths and base models', function () {
         'event' => EventModel::class,
         'general' => GeneralModel::class,
         'alternativeGeneral' => AlternativeGeneralModel::class,
+    ]);
+});
+
+it('can use a custom resolver', function () {
+    $this->discoverer
+        ->withBaseModels([BaseModel::class])
+        ->withPaths([__DIR__ . '/Fakes']);
+
+    // Use the table name as the morph class
+    MorphMapGenerator::resolveUsing(fn ($model) => $model->getTable());
+
+    $generated = $this->generator->generate(
+        $this->discoverer->discover()
+    );
+
+    expect($generated)->toEqual([
+        'event_models' => EventModel::class,
+        'general_models' => GeneralModel::class,
+    ]);
+
+    // If the custom resolver returns null, it should fall back to getMorphClass
+    MorphMapGenerator::resolveUsing(fn ($model) => null);
+
+    $generated = $this->generator->generate(
+        $this->discoverer->discover()
+    );
+
+    expect($generated)->toEqual([
+        'event' => EventModel::class,
+        'general' => GeneralModel::class,
     ]);
 });
 
