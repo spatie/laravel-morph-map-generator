@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-morph-map-generator` will be documented in this file
 
+## 1.2.1 - 2024-02-29
+
+### What's Changed
+
+* Laravel 11 Support by @erikn69 in https://github.com/spatie/laravel-morph-map-generator/pull/15
+
+**Full Changelog**: https://github.com/spatie/laravel-morph-map-generator/compare/1.2.0...1.2.1
+
 ## 1.2.0 - 2023-04-28
 
 - Add support for custom morph class resolvers (#13)
