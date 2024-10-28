@@ -8,6 +8,13 @@ return [
 
     'autogenerate' => true,
 
+    /*
+     * When enabled, morph maps will be optimized alongside Laravel 11+.
+     */
+
+    'optimize' => true,
+
+
     /**
      * When your models don't reside in the default App namespace you can set a
      * different base directory.
