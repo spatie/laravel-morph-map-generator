@@ -6,7 +6,6 @@ use Spatie\LaravelMorphMapGenerator\Cache\FilesystemMorphMapCacheDriver;
 use Spatie\LaravelMorphMapGenerator\Cache\MorphMapCacheDriver;
 use Spatie\LaravelMorphMapGenerator\Commands\CacheMorphMapCommand;
 use Spatie\LaravelMorphMapGenerator\Commands\ClearMorphMapCommand;
-
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 beforeEach(function () {
