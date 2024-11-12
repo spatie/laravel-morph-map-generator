@@ -30,7 +30,7 @@ class MorphMapGeneratorServiceProvider extends ServiceProvider
                 ClearMorphMapCommand::class,
             ]);
 
-            if(method_exists($this, 'optimizes') && config('morph-map-generator.optimize', true)) {
+            if (method_exists($this, 'optimizes') && config('morph-map-generator.optimize', true)) {
                 $this->optimizes('morph-map:cache', 'morph-map:clear', 'morph-map');
             }
         }
