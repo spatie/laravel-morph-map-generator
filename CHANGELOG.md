@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-morph-map-generator` will be documented in this file
 
+## 1.3.0 - 2024-11-12
+
+### What's Changed
+
+* Register optimize commands by @Riley19280 in https://github.com/spatie/laravel-morph-map-generator/pull/17
+
+### New Contributors
+
+* @Riley19280 made their first contribution in https://github.com/spatie/laravel-morph-map-generator/pull/17
+
+**Full Changelog**: https://github.com/spatie/laravel-morph-map-generator/compare/1.2.1...1.3.0
+
 ## 1.2.1 - 2024-02-29
 
 ### What's Changed
