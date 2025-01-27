@@ -19,25 +19,23 @@ beforeEach(function () {
     ]));
 });
 
-it('can cache a morph map')
-    ->tap(
-        fn () => artisan(CacheMorphMapCommand::class)
-            ->assertExitCode(0)
-            ->run()
-    )
-    ->expect(fn () => file_exists($this->temporaryDirectory->path('cached/morph-map.php')))
-    ->toBeTrue();
+it('can cache a morph map', function () {
+    artisan(CacheMorphMapCommand::class)
+        ->assertExitCode(0)
+        ->run();
 
-it('can remove a cached morph map')
-    ->tap(
-        fn () => artisan(CacheMorphMapCommand::class)
-            ->assertExitCode(0)
-            ->run()
-    )
-    ->tap(
-        fn () => artisan(ClearMorphMapCommand::class)
-            ->assertExitCode(0)
-            ->run()
-    )
-    ->expect(fn () => file_exists($this->temporaryDirectory->path('cached/morph-map.php')))
-    ->toBeFalse();
+    expect(file_exists($this->temporaryDirectory->path('cached/morph-map.php')))
+        ->toBeTrue();
+});
+
+it('can remove a cached morph map', function () {
+    artisan(CacheMorphMapCommand::class)
+        ->assertExitCode(0)
+        ->run();
+    artisan(ClearMorphMapCommand::class)
+        ->assertExitCode(0)
+        ->run();
+
+    expect(file_exists($this->temporaryDirectory->path('cached/morph-map.php')))
+        ->toBeFalse();
+});
