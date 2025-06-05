@@ -115,6 +115,7 @@ First, you have to implement `getMorphClass` for the models you want to include 
 Add the `Spatie\LaravelMorphMapGenerator\HasMorphMap` interface to your model:
 
 ```php
+use Illuminate\Database\Eloquent\Model;
 use Spatie\LaravelMorphMapGenerator\HasMorphMap;
 
 class Post extends Model implements HasMorphMap
@@ -125,6 +126,8 @@ class Post extends Model implements HasMorphMap
     }
 }
 ```
+
+When a model is not implementing `getMorphClass`, it will throw an exception when building the generated morph map, making it possible to quickly find models that do not have a morph map entry.
 
 When `autogenerate` is enabled in the `morph-map-generator` config file, the morph map in your application will be dynamically generated each time the application boots. This is great in development environments since each time your application boots, the morph map is regenerated. For performance reasons, you should cache the dynamically generated morph map by running the following command:
 
