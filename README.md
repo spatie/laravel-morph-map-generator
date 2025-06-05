@@ -6,7 +6,7 @@
 ![Check & fix styling](https://github.com/spatie/laravel-morph-map-generator/workflows/Check%20&%20fix%20styling/badge.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-morph-map-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-morph-map-generator)
 
-With this package, you shouldn't worry about forgetting to add models to your application's morph map. Each model will autoregister itself in the morph map. The only thing you should do is implementing the `getMorphClass` method on your models like this:
+With this package, you shouldn't worry about forgetting to add models to your application's morph map. Each model will autoregister itself in the morph map. The only thing you should do is implementing the `HasMorphMap` interface and add a `getMorphClass` method on models:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -110,9 +110,9 @@ return [
 
 ## Usage
 
-First, you have to implement `getMorphClass` for the models you want to include in your morph map.
+First, you have to implement `Spatie\LaravelMorphMapGenerator\HasMorphMap` for the model you want to include in your morph map.
 
-Add the `Spatie\LaravelMorphMapGenerator\HasMorphMap` interface to your model:
+Finally, add the `getMorphClass` method to your model and return the preferred mapping value:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -126,8 +126,6 @@ class Post extends Model implements HasMorphMap
     }
 }
 ```
-
-When a model is not implementing `getMorphClass`, it will throw an exception when building the generated morph map, making it possible to quickly find models that do not have a morph map entry.
 
 When `autogenerate` is enabled in the `morph-map-generator` config file, the morph map in your application will be dynamically generated each time the application boots. This is great in development environments since each time your application boots, the morph map is regenerated. For performance reasons, you should cache the dynamically generated morph map by running the following command:
 
@@ -163,7 +161,7 @@ Some models like the default Laravel User model and models defined by packages w
 Relation::enforceMorphMap([
     'comment' => 'Spatie\Comments\Models\Comment',
     'reaction' => 'Spatie\Comments\Models\Reaction',
-    'tenant' => 'Spatie\Multitenancy\Model\Tenant',
+    'tenant' => 'Spatie\Multitenancy\Models\Tenant',
 ]);
 ```
 
