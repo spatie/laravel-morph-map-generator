@@ -46,7 +46,6 @@ return [
 
     'ignored_models' => [],
 
-
     /*
     * Morph maps can be cached, there's a `FilesystemMorphMapCacheDriver` which
     * stores the morph map as a file in a directory or you can also use the
@@ -54,7 +53,7 @@ return [
     *
     * Both drivers have their own config:
     * - `FilesystemMorphMapCacheDriver` requires a `path` to store the file
-    * - `LaravelMorphMapCacheDriver` requires a `key` for storage
+    * - `LaravelMorphMapCacheDriver` optionally can have a custom `key` for storage
     */
 
     'cache' => [
