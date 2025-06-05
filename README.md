@@ -9,15 +9,19 @@
 With this package, you shouldn't worry about forgetting to add models to your application's morph map. Each model will autoregister itself in the morph map. The only thing you should do is implementing the `getMorphClass` method on your models like this:
 
 ```php
-class Post extends Model
+use Illuminate\Database\Eloquent\Model;
+use Spatie\LaravelMorphMapGenerator\HasMorphMap;
+
+class Post extends Model implements HasMorphMap
 {
-    public function getMorphClass(): string {
+    public function getMorphClass(): string
+    {
         return 'post';
     }
 }
 ```
 
-From now on, the `Post` model will be represented as `post` within your morph map.
+From now on, the `App\Models\Post` model will be represented as `post` within your morph map.
 
 ## Support us
 
@@ -106,21 +110,21 @@ return [
 
 ## Usage
 
-First, you have to implement `getMorphClass` for the models you want to include in your morph map. We suggest you create a new base model class in your application from which all your models extend. So you could throw an exception when `getMorphClass` was not yet implemented:
+First, you have to implement `getMorphClass` for the models you want to include in your morph map.
+
+Add the `Spatie\LaravelMorphMapGenerator\HasMorphMap` interface to your model:
 
 ```php
-use Illuminate\Database\Eloquent\Model;
+use Spatie\LaravelMorphMapGenerator\HasMorphMap;
 
-abstract class BaseModel extends Model
+class Post extends Model implements HasMorphMap
 {
-    public function getMorphClass()
+    public function getMorphClass(): string
     {
-        throw new Exception('The model should implement `getMorphClass`');
+        return 'post';
     }
 }
 ```
-
-When a model is not implementing `getMorphClass`, it will throw an exception when building the generated morph map, making it possible to quickly find models that do not have a morph map entry.
 
 When `autogenerate` is enabled in the `morph-map-generator` config file, the morph map in your application will be dynamically generated each time the application boots. This is great in development environments since each time your application boots, the morph map is regenerated. For performance reasons, you should cache the dynamically generated morph map by running the following command:
 
@@ -150,12 +154,13 @@ You may set the resolver in the `boot` method of one of your service providers.
 
 ### Models outside your path
 
-Some models like the default Laravel User model and models defined by packages will not be discovered by this package since it only searches for models within the app path and not the complete vendor directory. You can include these models in your morph map by using the default [morph map](https://laravel.com/docs/9.x/eloquent-relationships#custom-polymorphic-types) feature from Laravel:
+Some models like the default Laravel User model and models defined by packages will not be discovered by this package since it only searches for models within the app path and not the complete vendor directory. You can include these models in your morph map by using the default [morph map](https://laravel.com/docs/12.x/eloquent-relationships#custom-polymorphic-types) feature from Laravel:
 
 ```php
 Relation::enforceMorphMap([
-    'post' => 'App\Models\Post',
-    'video' => 'App\Models\Video',
+    'comment' => 'Spatie\Comments\Models\Comment',
+    'reaction' => 'Spatie\Comments\Models\Reaction',
+    'tenant' => 'Spatie\Multitenancy\Model\Tenant',
 ]);
 ```
 
