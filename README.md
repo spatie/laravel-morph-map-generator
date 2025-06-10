@@ -150,7 +150,7 @@ You may set the resolver in the `boot` method of one of your service providers.
 
 ### Models outside your path
 
-Some models like the default Laravel User model and models defined by packages will not be discovered by this package since it only searches for models within the app path and not the complete vendor directory. You can include these models in your morph map by using the default [morph map](https://laravel.com/docs/9.x/eloquent-relationships#custom-polymorphic-types) feature from Laravel:
+Some models like the default Laravel User model and models defined by packages will not be discovered by this package since it only searches for models within the app path and not the complete vendor directory. You can include these models in your morph map by using the default [morph map](https://laravel.com/docs/12.x/eloquent-relationships#custom-polymorphic-types) feature from Laravel:
 
 ```php
 Relation::enforceMorphMap([
