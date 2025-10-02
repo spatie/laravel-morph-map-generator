@@ -10,3 +10,4 @@ phpunit.xml
 psalm.xml
 vendor
 /.php_cs.cache
+/.phpunit.cache
