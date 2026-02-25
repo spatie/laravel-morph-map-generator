@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-morph-map-generator` will be documented in this file
 
+## 1.4.0 - 2026-02-25
+
+Add Laravel 13.x compatibility
+
 ## 1.3.1 - 2025-02-06
 
 ### What's Changed
