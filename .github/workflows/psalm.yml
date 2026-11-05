@@ -5,6 +5,8 @@ on:
     paths:
       - '**.php'
       - 'psalm.xml.dist'
+      - 'composer.json'
+      - '.github/workflows/psalm.yml'
 
 jobs:
   psalm:
@@ -16,7 +18,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.2'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
 
@@ -24,7 +26,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor
-          key: composer-${{ hashFiles('composer.lock') }}
+          key: psalm-php82-${{ hashFiles('composer.json') }}
 
       - name: Run composer install
         run: composer install -n --prefer-dist
