@@ -40,7 +40,7 @@ class MorphMapGenerator
             })->toArray();
     }
 
-    private function resolveMorphFromModelClass(ReflectionClass $reflection): ?array
+    private function resolveMorphFromModelClass(ReflectionClass $reflection): array
     {
         /** @var \Illuminate\Database\Eloquent\Model $model */
         $model = $reflection->newInstanceWithoutConstructor();
