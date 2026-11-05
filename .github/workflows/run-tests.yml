@@ -12,59 +12,18 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php: [7.4, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5]
-        laravel: ['8.*', '9.*', '10.*', '11.*', '12.*', '13.*']
+        php: [8.2, 8.3, 8.4, 8.5, '8.6']
+        laravel: ['12.*', '13.*']
         dependency-version: [prefer-lowest, prefer-stable]
         include:
-          - laravel: 8.*
-            testbench: ^6.24
-          - laravel: 9.*
-            testbench: 7.*
-          - laravel: 10.*
-            testbench: 8.*
-          - laravel: 11.*
-            testbench: 9.*
           - laravel: 12.*
             testbench: ^10.6
           - laravel: 13.*
             testbench: ^11.0
         exclude:
-          - laravel: 8.*
-            php: 8.5
-          - laravel: 8.*
-            php: 8.4
-          - laravel: 8.*
-            php: 8.3
-          - laravel: 9.*
-            php: 8.5
-          - laravel: 9.*
-            php: 8.4
-          - laravel: 9.*
-            php: 7.4
-          - laravel: 10.*
-            php: 7.4
-          - laravel: 10.*
-            php: 8.0
-          - laravel: 10.*
-            php: 8.5
-          - laravel: 11.*
-            php: 7.4
-          - laravel: 11.*
-            php: 8.0
-          - laravel: 11.*
-            php: 8.1
+          # Testbench 10's Symfony Process constraint conflicts with Pest 5/ParaTest on PHP 8.6.
           - laravel: 12.*
-            php: 7.4
-          - laravel: 12.*
-            php: 8.0
-          - laravel: 12.*
-            php: 8.1
-          - laravel: 13.*
-            php: 7.4
-          - laravel: 13.*
-            php: 8.0
-          - laravel: 13.*
-            php: 8.1
+            php: '8.6'
           - laravel: 13.*
             php: 8.2
 
@@ -91,6 +50,9 @@ jobs:
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:>=2.72.6" --no-interaction --no-update
           composer remove vimeo/psalm --dev --no-interaction --no-update
+          if [[ "${{ matrix.laravel }}" == "13.*" && ( "${{ matrix.php }}" == "8.5" || "${{ matrix.php }}" == "8.6" ) ]]; then
+            composer require --dev "pestphp/pest-plugin-laravel:^5.0" "phpunit/phpunit:^13.0" --no-interaction --no-update
+          fi
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
